@@ -12,16 +12,14 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class Config {
-
-//    @Autowired
-//    private UserDetailsService userDetailsService;
+public class Config  {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
 //        http.csrf(customizer -> customizer.disable());
-        http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
+//        http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
+        http.authorizeRequests().requestMatchers("/csrf-token").hasRole("ADMIN");
         http.formLogin(Customizer.withDefaults());
         http.httpBasic(Customizer.withDefaults());
 
@@ -35,14 +33,14 @@ public class Config {
                 .withDefaultPasswordEncoder()
                 .username("vansh")
                 .password("1234")
-                .roles("USER")
+                .roles("ADMIN")
                 .build();
 
         UserDetails user2 = User
                 .withDefaultPasswordEncoder()
-                .username("tushar")
+                .username("user")
                 .password("0987")
-                .roles("ADMIN")
+                .roles("USER")
                 .build();
         return new InMemoryUserDetailsManager(user1,user2);
     }
